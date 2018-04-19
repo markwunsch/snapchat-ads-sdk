@@ -32,8 +32,10 @@ type Client struct {
 	customVersion bool
 	// accessToken is the user's access token to use for authorization
 	accessToken string
-
+	// Users is the service used to get the authenticated user
 	Users *UserService
+	// Organizations is the service used to get organizations
+	Organizations *OrganizationService
 }
 
 // NewClient creates a new instance of Client with any optional functions applied
@@ -48,6 +50,7 @@ func NewClient(optFns ...func(*Client) error) (*Client, error) {
 		client:  client,
 	}
 	c.Users = &UserService{client: c}
+	c.Organizations = &OrganizationService{client: c}
 
 	for _, fn := range optFns {
 		if err := fn(c); err != nil {
