@@ -13,19 +13,19 @@ import (
 	"golang.org/x/net/context/ctxhttp"
 )
 
-// requestResponse is used to encapsulate important info from an http request
-type requestResponse struct {
-	// header contains the http headers that were returned by the api
-	header http.Header
-	// statusCode contains the status code returned by the api
-	statusCode int
-	// requestURL contains the url of the request that was executed
-	requestURL *url.URL
+// RequestResponse is used to encapsulate important info from an http request
+type RequestResponse struct {
+	// Geader contains the http headers that were returned by the api
+	Header http.Header
+	// StatusCode contains the status code returned by the api
+	StatusCode int
+	// RequestURL contains the url of the request that was executed
+	RequestURL *url.URL
 }
 
 // do is used to executed http responses and unmarshal the results into the provided interface
-func (cli *Client) do(ctx context.Context, request *http.Request, target interface{}) (requestResponse, error) {
-	responseObj := requestResponse{requestURL: request.URL, statusCode: -1}
+func (cli *Client) do(ctx context.Context, request *http.Request, target interface{}) (RequestResponse, error) {
+	responseObj := RequestResponse{RequestURL: request.URL, StatusCode: -1}
 	request.Header.Set("User-Agent", `Snapchat Ads API Go SDK `+cli.version)
 
 	response, err := ctxhttp.Do(ctx, cli.client, request)
@@ -35,12 +35,12 @@ func (cli *Client) do(ctx context.Context, request *http.Request, target interfa
 	defer response.Body.Close()
 
 	if response != nil {
-		responseObj.statusCode = response.StatusCode
-		responseObj.header = response.Header
+		responseObj.StatusCode = response.StatusCode
+		responseObj.Header = response.Header
 	}
 
-	if responseObj.statusCode < 200 || responseObj.statusCode >= 400 {
-		return responseObj, errors.New(fmt.Sprintf(`%d status code returned from snapchat api`, responseObj.statusCode))
+	if responseObj.StatusCode < 200 || responseObj.StatusCode >= 400 {
+		return responseObj, errors.New(fmt.Sprintf(`%d status code returned from snapchat api`, responseObj.StatusCode))
 	}
 
 	err = json.NewDecoder(response.Body).Decode(target)
