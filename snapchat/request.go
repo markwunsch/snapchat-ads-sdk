@@ -7,24 +7,12 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"golang.org/x/net/context/ctxhttp"
 )
 
-// RequestResponse is used to encapsulate important info from an http request
-type RequestResponse struct {
-	// Header contains the http headers that were returned by the api
-	Header http.Header
-	// StatusCode contains the status code returned by the api
-	StatusCode int
-	// RequestURL contains the url of the request that was executed
-	RequestURL *url.URL
-}
-
 // do is used to executed http responses and unmarshal the results into the provided interface
 func (cli *Client) do(ctx context.Context, request *http.Request, target interface{}) error {
-	responseObj := RequestResponse{RequestURL: request.URL, StatusCode: -1}
 	request.Header.Set("User-Agent", `Snapchat Ads API Go SDK `+cli.version)
 
 	response, err := ctxhttp.Do(ctx, cli.client, request)
@@ -34,16 +22,12 @@ func (cli *Client) do(ctx context.Context, request *http.Request, target interfa
 	defer response.Body.Close()
 
 	if response != nil {
-		responseObj.StatusCode = response.StatusCode
-		responseObj.Header = response.Header
+		if statusErr := getErrorFromStatusCode(response.StatusCode); statusErr != nil {
+			return statusErr
+		}
+		return json.NewDecoder(response.Body).Decode(target)
 	}
-
-	if statusErr := getErrorFromStatusCode(response.StatusCode); statusErr != nil {
-		return statusErr
-	}
-
-	err = json.NewDecoder(response.Body).Decode(target)
-	return err
+	return fmt.Errorf(`nil response`)
 }
 
 // createRequest is used to get an http request object
