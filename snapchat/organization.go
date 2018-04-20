@@ -2,7 +2,6 @@ package snapchat
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -87,7 +86,7 @@ func (org *OrganizationService) List(ctx context.Context) ([]*Organization, erro
 		if len(c.Organizations) > 0 {
 			return getOrganizationsFromResponse(c.Organizations), nil
 		}
-		return nil, errors.New("no organizations found")
+		return nil, fmt.Errorf("no organizations found")
 	}
 	return nil, fmt.Errorf(`non-success status returned from snapchat api (list organizations): %s`, c.RequestStatus)
 }
