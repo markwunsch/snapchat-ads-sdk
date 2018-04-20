@@ -2,11 +2,10 @@ package snapchat
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
-
-	"github.com/go-errors/errors"
 )
 
 type OrganizationService service
@@ -91,7 +90,7 @@ func (org *OrganizationService) List(ctx context.Context) ([]*Organization, Requ
 		if len(c.Organizations) > 0 {
 			return getOrganizationsFromResponse(c.Organizations), respObj, nil
 		} else {
-			return nil, respObj, errors.New("No organizations found")
+			return nil, respObj, errors.New("no organizations found")
 		}
 	} else {
 		return nil, respObj, errors.New(fmt.Sprintf(`non-success status returned from snapchat api (list organizations): %s`, c.RequestStatus))

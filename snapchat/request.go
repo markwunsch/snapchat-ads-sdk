@@ -4,18 +4,18 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 
-	"github.com/go-errors/errors"
 	"golang.org/x/net/context/ctxhttp"
 )
 
 // RequestResponse is used to encapsulate important info from an http request
 type RequestResponse struct {
-	// Geader contains the http headers that were returned by the api
+	// Header contains the http headers that were returned by the api
 	Header http.Header
 	// StatusCode contains the status code returned by the api
 	StatusCode int
