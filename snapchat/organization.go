@@ -72,7 +72,7 @@ func (org *OrganizationService) Get(ctx context.Context, organizationId string) 
 	}
 }
 
-// List returns all organizations assoicated with the authenticated user
+// List returns all organizations associated with the authenticated user
 func (org *OrganizationService) List(ctx context.Context) ([]*Organization, RequestResponse, error) {
 	path := "me/organizations"
 	req, err := org.client.createRequest("GET", path, nil)
