@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -24,13 +23,13 @@ type RequestResponse struct {
 }
 
 // do is used to executed http responses and unmarshal the results into the provided interface
-func (cli *Client) do(ctx context.Context, request *http.Request, target interface{}) (RequestResponse, error) {
+func (cli *Client) do(ctx context.Context, request *http.Request, target interface{}) error {
 	responseObj := RequestResponse{RequestURL: request.URL, StatusCode: -1}
 	request.Header.Set("User-Agent", `Snapchat Ads API Go SDK `+cli.version)
 
 	response, err := ctxhttp.Do(ctx, cli.client, request)
 	if err != nil {
-		return responseObj, err
+		return err
 	}
 	defer response.Body.Close()
 
@@ -39,12 +38,12 @@ func (cli *Client) do(ctx context.Context, request *http.Request, target interfa
 		responseObj.Header = response.Header
 	}
 
-	if responseObj.StatusCode < 200 || responseObj.StatusCode >= 400 {
-		return responseObj, errors.New(fmt.Sprintf(`%d status code returned from snapchat api`, responseObj.StatusCode))
+	if statusErr := getErrorFromStatusCode(response.StatusCode); statusErr != nil {
+		return statusErr
 	}
 
 	err = json.NewDecoder(response.Body).Decode(target)
-	return responseObj, err
+	return err
 }
 
 // createRequest is used to get an http request object
@@ -72,4 +71,94 @@ func (cli *Client) createRequest(method, path string, body interface{}) (*http.R
 		request.Header.Set("Content-Type", "application/json")
 	}
 	return request, nil
+}
+
+func getErrorFromStatusCode(statusCode int) error {
+	switch statusCode {
+	case 401:
+		return new(ErrBadRequest)
+	case 402:
+		return new(ErrUnauthorized)
+	case 403:
+		return new(ErrForbidden)
+	case 404:
+		return new(ErrNotFound)
+	case 405:
+		return new(ErrMethodNotAllowed)
+	case 406:
+		return new(ErrNotAcceptable)
+	case 410:
+		return new(ErrGone)
+	case 429:
+		return new(ErrTooManyRequests)
+	case 500:
+		return new(ErrInternalServerError)
+	case 503:
+		return new(ErrServiceUnavailable)
+	default:
+		if statusCode < 200 || statusCode >= 400 {
+			return fmt.Errorf(`%d status code returned from snapchat api`, statusCode)
+		}
+	}
+	return nil
+}
+
+type ErrUnauthorized struct{}
+
+func (err *ErrUnauthorized) Error() string {
+	return "401: unauthorized"
+}
+
+type ErrBadRequest struct{}
+
+func (err *ErrBadRequest) Error() string {
+	return "400: bad request"
+}
+
+type ErrForbidden struct{}
+
+func (err *ErrForbidden) Error() string {
+	return "403: forbidden"
+}
+
+type ErrNotFound struct{}
+
+func (err *ErrNotFound) Error() string {
+	return "404: not found"
+}
+
+type ErrMethodNotAllowed struct{}
+
+func (err *ErrMethodNotAllowed) Error() string {
+	return "405: method not allowed"
+}
+
+type ErrNotAcceptable struct{}
+
+func (err *ErrNotAcceptable) Error() string {
+	return "406: not acceptable"
+}
+
+type ErrGone struct{}
+
+func (err *ErrGone) Error() string {
+	return "410: gone"
+}
+
+type ErrTooManyRequests struct{}
+
+func (err *ErrTooManyRequests) Error() string {
+	return "429: too many requests"
+}
+
+type ErrInternalServerError struct{}
+
+func (err *ErrInternalServerError) Error() string {
+	return "500: internal server error"
+}
+
+type ErrServiceUnavailable struct{}
+
+func (err *ErrServiceUnavailable) Error() string {
+	return "503: service unavailable"
 }

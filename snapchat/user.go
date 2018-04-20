@@ -28,17 +28,17 @@ type getAuthenticatedUserResponse struct {
 }
 
 // GetAuthenticatedUser returns the user that is currently authenticated
-func (usr *UserService) GetAuthenticatedUser(ctx context.Context) (*User, RequestResponse, error) {
+func (usr *UserService) GetAuthenticatedUser(ctx context.Context) (*User, error) {
 	path := `me`
 	req, err := usr.client.createRequest("GET", path, nil)
 	if err != nil {
-		return nil, RequestResponse{StatusCode: -1}, err
+		return nil, err
 	}
 
 	a := new(getAuthenticatedUserResponse)
-	respObj, err := usr.client.do(ctx, req, a)
+	err = usr.client.do(ctx, req, a)
 	if err != nil {
-		return nil, respObj, err
+		return nil, err
 	}
-	return a.Me, respObj, nil
+	return a.Me, nil
 }

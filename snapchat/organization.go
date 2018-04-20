@@ -45,55 +45,55 @@ type OrganizationResponse struct {
 }
 
 // Get returns a single organization associated with the provided organization id
-func (org *OrganizationService) Get(ctx context.Context, organizationId string) (*Organization, RequestResponse, error) {
+func (org *OrganizationService) Get(ctx context.Context, organizationId string) (*Organization, error) {
 	path := fmt.Sprintf(`organizations/%s`, organizationId)
 	req, err := org.client.createRequest("GET", path, nil)
 	if err != nil {
-		return nil, RequestResponse{StatusCode: -1}, err
+		return nil, err
 	}
 
 	a := new(GetOrganizationsResponse)
-	respObj, err := org.client.do(ctx, req, a)
+	err = org.client.do(ctx, req, a)
 	if err != nil {
-		return nil, respObj, err
+		return nil, err
 	}
 	if strings.ToLower(a.RequestStatus) == "success" {
 		if len(a.Organizations) >= 1 {
 			if strings.ToLower(a.Organizations[0].SubRequestStatus) == "success" {
-				return &a.Organizations[0].Organization, respObj, nil
+				return &a.Organizations[0].Organization, nil
 			} else {
-				return nil, respObj, errors.New(fmt.Sprintf(`non-success status returned from snapchat api (get organization): %s`, a.RequestStatus))
+				return nil, fmt.Errorf(`non-success status returned from snapchat api (get organization): %s`, a.RequestStatus)
 			}
 		} else {
-			return nil, respObj, errors.New(fmt.Sprintf("No organizations found with organization id: %s", organizationId))
+			return nil, fmt.Errorf("No organizations found with organization id: %s", organizationId)
 		}
 	} else {
-		return nil, respObj, errors.New(fmt.Sprintf(`non-success status returned from snapchat api (get organization): %s`, a.RequestStatus))
+		return nil, fmt.Errorf(`non-success status returned from snapchat api (get organization): %s`, a.RequestStatus)
 	}
 }
 
 // List returns all organizations associated with the authenticated user
-func (org *OrganizationService) List(ctx context.Context) ([]*Organization, RequestResponse, error) {
+func (org *OrganizationService) List(ctx context.Context) ([]*Organization, error) {
 	path := "me/organizations"
 	req, err := org.client.createRequest("GET", path, nil)
 	if err != nil {
-		return nil, RequestResponse{StatusCode: -1}, err
+		return nil, err
 	}
 
 	c := new(GetOrganizationsResponse)
-	respObj, err := org.client.do(ctx, req, c)
+	err = org.client.do(ctx, req, c)
 	if err != nil {
-		return nil, respObj, err
+		return nil, err
 	}
 
 	if strings.ToLower(c.RequestStatus) == "success" {
 		if len(c.Organizations) > 0 {
-			return getOrganizationsFromResponse(c.Organizations), respObj, nil
+			return getOrganizationsFromResponse(c.Organizations), nil
 		} else {
-			return nil, respObj, errors.New("no organizations found")
+			return nil, errors.New("no organizations found")
 		}
 	} else {
-		return nil, respObj, errors.New(fmt.Sprintf(`non-success status returned from snapchat api (list organizations): %s`, c.RequestStatus))
+		return nil, fmt.Errorf(`non-success status returned from snapchat api (list organizations): %s`, c.RequestStatus)
 	}
 }
 
