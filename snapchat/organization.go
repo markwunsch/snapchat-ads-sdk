@@ -61,15 +61,12 @@ func (org *OrganizationService) Get(ctx context.Context, organizationId string) 
 		if len(a.Organizations) >= 1 {
 			if strings.ToLower(a.Organizations[0].SubRequestStatus) == "success" {
 				return &a.Organizations[0].Organization, nil
-			} else {
-				return nil, fmt.Errorf(`non-success status returned from snapchat api (get organization): %s`, a.RequestStatus)
 			}
-		} else {
-			return nil, fmt.Errorf("No organizations found with organization id: %s", organizationId)
+			return nil, fmt.Errorf(`non-success status returned from snapchat api (get organization): %s`, a.RequestStatus)
 		}
-	} else {
-		return nil, fmt.Errorf(`non-success status returned from snapchat api (get organization): %s`, a.RequestStatus)
+		return nil, fmt.Errorf("no organizations found with organization id: %s", organizationId)
 	}
+	return nil, fmt.Errorf(`non-success status returned from snapchat api (get organization): %s`, a.RequestStatus)
 }
 
 // List returns all organizations associated with the authenticated user
@@ -89,12 +86,10 @@ func (org *OrganizationService) List(ctx context.Context) ([]*Organization, erro
 	if strings.ToLower(c.RequestStatus) == "success" {
 		if len(c.Organizations) > 0 {
 			return getOrganizationsFromResponse(c.Organizations), nil
-		} else {
-			return nil, errors.New("no organizations found")
 		}
-	} else {
-		return nil, fmt.Errorf(`non-success status returned from snapchat api (list organizations): %s`, c.RequestStatus)
+		return nil, errors.New("no organizations found")
 	}
+	return nil, fmt.Errorf(`non-success status returned from snapchat api (list organizations): %s`, c.RequestStatus)
 }
 
 // getOrganizationsFromResponse returns the organization objects in an OrganizationResponse object
