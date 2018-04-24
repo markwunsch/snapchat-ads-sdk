@@ -7,8 +7,10 @@ import (
 	"time"
 )
 
+// OrganizationService provides functions for interacting with snapchat organizations
 type OrganizationService service
 
+// Organization represents an organization in the snapchat ads api
 type Organization struct {
 	// Id is the unique id associated with the organization
 	Id string `json:"id"`
@@ -32,12 +34,14 @@ type Organization struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+// GetOrganizationsResponse is the response object for calls to get organizations
 type GetOrganizationsResponse struct {
 	RequestStatus string                  `json:"request_status"`
 	RequestId     string                  `json:"request_id"`
 	Organizations []*OrganizationResponse `json:"organizations"`
 }
 
+// OrganizationResponse is the individual organization object in the response for calls to get organizations
 type OrganizationResponse struct {
 	SubRequestStatus string       `json:"sub_request_status"`
 	Organization     Organization `json:"organization"`

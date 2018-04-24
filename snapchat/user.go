@@ -5,8 +5,10 @@ import (
 	"time"
 )
 
+// UserService provides functions for interacting with snapchat users
 type UserService service
 
+// User represents a user in the snapchat ads api
 type User struct {
 	// Id is the unique id associated with the user
 	Id string `json:"id"`

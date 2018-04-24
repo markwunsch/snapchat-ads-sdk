@@ -87,60 +87,70 @@ func getErrorFromStatusCode(statusCode int) error {
 	return nil
 }
 
+// ErrUnauthorized is the error returned when the api returns a 401 status code
 type ErrUnauthorized struct{}
 
 func (err *ErrUnauthorized) Error() string {
 	return "401: unauthorized"
 }
 
+// ErrBadRequest is the error returned when the api returns a 400 status code
 type ErrBadRequest struct{}
 
 func (err *ErrBadRequest) Error() string {
 	return "400: bad request"
 }
 
+// ErrForbidden is the error returned when the api returns a 403 status code
 type ErrForbidden struct{}
 
 func (err *ErrForbidden) Error() string {
 	return "403: forbidden"
 }
 
+// ErrNotFound is the error returned when the api returns a 404 status code
 type ErrNotFound struct{}
 
 func (err *ErrNotFound) Error() string {
 	return "404: not found"
 }
 
+// ErrMethodNotAllowed is the error returned when the api returns a 405 status code
 type ErrMethodNotAllowed struct{}
 
 func (err *ErrMethodNotAllowed) Error() string {
 	return "405: method not allowed"
 }
 
+// ErrNotAcceptable is the error returned when the api returns a 406 status code
 type ErrNotAcceptable struct{}
 
 func (err *ErrNotAcceptable) Error() string {
 	return "406: not acceptable"
 }
 
+// ErrGone is the error returned when the api returns a 410 status code
 type ErrGone struct{}
 
 func (err *ErrGone) Error() string {
 	return "410: gone"
 }
 
+// ErrTooManyRequests is the error returned when the api returns a 429 status code
 type ErrTooManyRequests struct{}
 
 func (err *ErrTooManyRequests) Error() string {
 	return "429: too many requests"
 }
 
+// ErrInternalServerError is the error returned when the api returns a 500 status code
 type ErrInternalServerError struct{}
 
 func (err *ErrInternalServerError) Error() string {
 	return "500: internal server error"
 }
 
+// ErrServiceUnavailable is the error returned when the api returns a 503 status code
 type ErrServiceUnavailable struct{}
 
 func (err *ErrServiceUnavailable) Error() string {

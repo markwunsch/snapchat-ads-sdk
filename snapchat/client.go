@@ -10,7 +10,9 @@ import (
 )
 
 const (
-	DefaultSnapchatHost    = `https://adsapi.snapchat.com`
+	// DefaultSnapchatHost is the default host address to use for calls to the snapchat ads api
+	DefaultSnapchatHost = `https://adsapi.snapchat.com`
+	// DefaultSnapchatVersion is the default version to use for calls to the snapchat ads api
 	DefaultSnapchatVersion = `v1`
 )
 
