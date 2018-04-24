@@ -2,7 +2,6 @@ package snapchat
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"strings"
 )
@@ -10,7 +9,7 @@ import (
 // AdAccountService provides functions for interacting with snapchat ad accounts
 type AdAccountService service
 
-// User represents an ad account in the snapchat ads api
+// AdAccount represents an ad account in the snapchat ads api
 type AdAccount struct {
 	// Id is the unique id associated with the ad account
 	Id string `json:"id"`
@@ -68,12 +67,10 @@ func (ad *AdAccountService) Get(ctx context.Context, adAccountId string) (*AdAcc
 	if a.RequestStatus == "success" {
 		if len(a.AdAccounts) > 1 {
 			return &a.AdAccounts[0].AdAccount, nil
-		} else {
-			return nil, errors.New(fmt.Sprintf("No ad accounts found with ad account id: %s", adAccountId))
 		}
-	} else {
-		return nil, errors.New(fmt.Sprintf(`non-success status returned from snapchat api (get ad account): %s`, a.RequestStatus))
+		return nil, fmt.Errorf("No ad accounts found with ad account id: %s", adAccountId)
 	}
+	return nil, fmt.Errorf(`non-success status returned from snapchat api (get ad account): %s`, a.RequestStatus)
 }
 
 // List returns all ad accounts associated with the provided organization id
@@ -93,12 +90,10 @@ func (ad *AdAccountService) List(ctx context.Context, organizationId string) ([]
 	if strings.ToLower(c.RequestStatus) == "success" {
 		if len(c.AdAccounts) > 0 {
 			return getAdAccountsFromResponse(c.AdAccounts), nil
-		} else {
-			return nil, fmt.Errorf("no ad accounts found for organization id: %s", organizationId)
 		}
-	} else {
-		return nil, fmt.Errorf(`non-success status returned from snapchat api (list ad accounts): %s`, c.RequestStatus)
+		return nil, fmt.Errorf("no ad accounts found for organization id: %s", organizationId)
 	}
+	return nil, fmt.Errorf(`non-success status returned from snapchat api (list ad accounts): %s`, c.RequestStatus)
 }
 
 // getAdAccountsFromResponse returns the organization objects in an GetAdAccountsResponse object
