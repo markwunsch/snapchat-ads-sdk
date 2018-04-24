@@ -16,9 +16,9 @@ type AdAccount struct {
 	// Name is the name associated with the ad account
 	Name string `json:"name"`
 	// OrganizationId is the id of the organization the user is associated with
-	OrganizationId string `json:"name"`
+	OrganizationId string `json:"organization_id"`
 	// Timezone is the timezone that is associated with the account
-	Timezone string `json:"name"`
+	Timezone string `json:"timezone"`
 	// Type is the type of ad account
 	Type string `json:"type"`
 	// LifetimeSpendCapMicro is the lifetime spend limit for the account
