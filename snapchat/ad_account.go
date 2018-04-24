@@ -64,11 +64,11 @@ func (ad *AdAccountService) Get(ctx context.Context, adAccountId string) (*AdAcc
 	if err != nil {
 		return nil, err
 	}
-	if a.RequestStatus == "success" {
+	if strings.ToLower(a.RequestStatus) == "success" {
 		if len(a.AdAccounts) > 1 {
 			return &a.AdAccounts[0].AdAccount, nil
 		}
-		return nil, fmt.Errorf("No ad accounts found with ad account id: %s", adAccountId)
+		return nil, fmt.Errorf("no ad accounts found with ad account id: %s", adAccountId)
 	}
 	return nil, fmt.Errorf(`non-success status returned from snapchat api (get ad account): %s`, a.RequestStatus)
 }
