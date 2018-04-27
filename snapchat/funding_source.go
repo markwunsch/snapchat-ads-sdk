@@ -54,7 +54,7 @@ type FundingSource struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-// type GetFundingSourcesResponse struct { is the response object returned when getting funding sources
+// GetFundingSourcesResponse struct { is the response object returned when getting funding sources
 type GetFundingSourcesResponse struct {
 	RequestStatus  string                   `json:"request_status"`
 	RequestId      string                   `json:"request_id"`
