@@ -36,10 +36,12 @@ type Client struct {
 	accessToken string
 	// Users is the service used to get the authenticated user
 	Users *UserService
-	// Organizations is the service used to get organizations
+	// Organizations is the service used to interact with organizations
 	Organizations *OrganizationService
-	// AdAccounts is the service used to get ad accounts
+	// AdAccounts is the service used to interact with ad accounts
 	AdAccounts *AdAccountService
+	// Campaigns is the service used to interact with campaigns
+	Campaigns *CampaignService
 }
 
 // NewClient creates a new instance of Client with any optional functions applied
@@ -56,6 +58,7 @@ func NewClient(optFns ...func(*Client) error) (*Client, error) {
 	c.Users = &UserService{client: c}
 	c.Organizations = &OrganizationService{client: c}
 	c.AdAccounts = &AdAccountService{client: c}
+	c.Campaigns = &CampaignService{client: c}
 
 	for _, fn := range optFns {
 		if err := fn(c); err != nil {
