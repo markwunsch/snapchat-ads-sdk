@@ -42,6 +42,8 @@ type Client struct {
 	AdAccounts *AdAccountService
 	// Campaigns is the service used to interact with campaigns
 	Campaigns *CampaignService
+	// FundingSources is the service used to interact with campaigns
+	FundingSources *FundingSourceService
 }
 
 // NewClient creates a new instance of Client with any optional functions applied
@@ -59,6 +61,7 @@ func NewClient(optFns ...func(*Client) error) (*Client, error) {
 	c.Organizations = &OrganizationService{client: c}
 	c.AdAccounts = &AdAccountService{client: c}
 	c.Campaigns = &CampaignService{client: c}
+	c.FundingSources = &FundingSourceService{client: c}
 
 	for _, fn := range optFns {
 		if err := fn(c); err != nil {
