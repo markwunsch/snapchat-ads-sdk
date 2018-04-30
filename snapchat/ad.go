@@ -131,9 +131,8 @@ func (ad *AdService) Delete(ctx context.Context, adId string) error {
 
 	if strings.ToLower(c.RequestStatus) == "success" {
 		return nil
-	} else {
-		return fmt.Errorf(`non-success status returned from snapchat api (delete ad with id %s): %s`, adId, c.RequestStatus)
 	}
+	return fmt.Errorf(`non-success status returned from snapchat api (delete ad with id %s): %s`, adId, c.RequestStatus)
 }
 
 func getAdsFromResponse(list []*AdResponse) []*Ad {
