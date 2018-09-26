@@ -35,7 +35,7 @@ type AdSquad struct {
 	// Status is the status of the ad squad
 	Status string `json:"status"`
 	// Targeting is the targeting spec of the ad squad
-	Targeting string `json:"targeting"` // might not be a string
+	//Targeting string `json:"targeting"` // might not be a string
 	// IncludedContentType is a list of content types that will be included in this ad squad
 	IncludedContentType []string `json:"included_content_types"`
 	// ExcludedContentType is a list of content types that will be excluded in this ad squad
