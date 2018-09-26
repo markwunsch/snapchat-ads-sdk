@@ -59,9 +59,9 @@ func (cli *Client) createRequest(method, path string, body interface{}) (*http.R
 
 func getErrorFromStatusCode(statusCode int) error {
 	switch statusCode {
-	case 401:
+	case 400:
 		return new(ErrBadRequest)
-	case 402:
+	case 401:
 		return new(ErrUnauthorized)
 	case 403:
 		return new(ErrForbidden)
