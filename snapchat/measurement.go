@@ -16,13 +16,13 @@ type GetMeasurementsResponse struct {
 	TotalStats    []*TotalStats `json:"total_stats"`    // the object containing total stats for this entity
 }
 
-// TotalStat is a wrapper object for the stats response
+// TotalStats is a wrapper object for the stats response
 type TotalStats struct {
 	SubRequestStatus string    `json:"sub_request_status"`
 	TotalStat        TotalStat `json:"total_stat"`
 }
 
-// MeasurementStats is an object that contains the total metrics for the requested entity
+// TotalStat is an object that contains the total metrics for the requested entity
 type TotalStat struct {
 	Id          string           `json:"id"`          // the id of the entity
 	Type        string           `json:"type"`        // the type of the entity
