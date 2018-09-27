@@ -41,11 +41,11 @@ type AdSquad struct {
 	// ExcludedContentType is a list of content types that will be excluded in this ad squad
 	ExcludedContentType []string `json:"excluded_content_types"`
 	// CapAndExclusionConfig is the frequency cap and exclusion spec
-	CapAndExclusionConfig string `json:"cap_and_exclusion_config"` // might not be a string
+	//CapAndExclusionConfig string `json:"cap_and_exclusion_config"` // might not be a string
 	// LifetimeBudgetMicro is the lifetime spend budget of the ad squad (micro-currency)
 	LifetimeBudgetMicro int64 `json:"lifetime_budget_micro"`
 	// AdSchedulingConfig is the schedule for running ads on this adsquad
-	AdSchedulingConfig string `json:"ad_scheduling_config"` // might not be a string
+	//AdSchedulingConfig string `json:"ad_scheduling_config"` // might not be a string
 	// Type is the type of ad squad
 	Type string `json:"type"`
 }
